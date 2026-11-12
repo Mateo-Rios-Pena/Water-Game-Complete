@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Water Quest</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Water Quest</h1>
+    <p class="game-instructions">
+      Tap the water cans as they pop up. Collect <span id="goal-cans">20</span> before time runs out,
+      and avoid the brown dirty water drops. They cost you cans!
+    </p>
+
+    <div class="stats">
+      <p>Cans Collected: <span id="current-cans">0</span></p>
+      <p>Time Left: <span id="timer">30</span>s</p>
+    </div>
+
+    <!-- Messages appear here: milestones, start, and game over -->
+    <div id="achievements" class="achievement" role="status" aria-live="polite"></div>
+
+    <div class="game-grid"></div>
+
+    <div class="buttons">
+      <button id="start-game">Start Game</button>
+      <button id="reset-game">Reset</button>
+    </div>
+
+    <p class="credit">
+      A game for <span class="brand-name">charity: water</span>.
+      <a href="https://www.charitywater.org" target="_blank" rel="noopener">Learn more</a>
+    </p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

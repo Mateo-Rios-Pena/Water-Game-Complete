@@ -1,0 +1,356 @@
+/* Charity: water Brand Colors & Fonts
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+Fonts:
+- Proxima Nova
+- Avenir
+
+*/
+
+:root {
+  --yellow: #FFC907;
+  --blue: #2E9DF7;
+  --light-blue: #8BD1CB;
+  --red: #F5402C;
+  --text: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Proxima Nova", Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: var(--yellow);  /* brand yellow around a white card */
+  color: var(--text);
+}
+
+.container {
+  max-width: 750px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+h1 {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.game-instructions {
+  font-size: 18px;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+/* ---------- Score and timer ---------- */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.stats p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#current-cans,
+#timer {
+  display: inline-block;
+  min-width: 1.5em;
+  text-align: center;
+}
+
+/* The score pops when you collect a can */
+#current-cans.bump {
+  animation: bump 0.3s ease;
+}
+
+@keyframes bump {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+
+/* The timer turns red in the last 5 seconds */
+#timer.low {
+  color: var(--red);
+}
+
+/* ---------- Message box ---------- */
+.achievement {
+  min-height: 52px;          /* reserves space so the page doesn't jump */
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.achievement.show {
+  background-color: var(--light-blue);
+}
+
+/* ---------- Game grid ---------- */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.grid-cell {
+  background-color: #fff;                    /* brand: keep the can on white */
+  border: 3px solid var(--light-blue);
+  border-radius: 12px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;                /* faster taps on phones */
+  user-select: none;
+}
+
+/* The cell flashes blue when a can is collected */
+.grid-cell.hit {
+  background-color: var(--blue);
+}
+
+.water-can-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+}
+
+.water-can {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  background-image: url('img/water-can.png');
+  background-size: contain;      /* shows the whole can, never stretched */
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
+  transform-origin: center;
+}
+
+.water-can:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+
+@keyframes popUp {
+  0%   { transform: scale(0.5); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Start button ---------- */
+.buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+#start-game,
+#reset-game {
+  background-color: var(--yellow);
+  color: var(--text);
+  border: none;
+  padding: 14px 32px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* Reset is the secondary button: white with a dark outline */
+#reset-game {
+  background-color: #fff;
+  border: 2px solid var(--text);
+}
+
+#start-game:hover:not(:disabled),
+#reset-game:hover {
+  transform: translateY(-2px);
+}
+
+#start-game:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#start-game:focus-visible,
+#reset-game:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ---------- Obstacle (dirty water drop) ---------- */
+.obstacle {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
+}
+
+/* A brown drop shape: a square with three round corners, turned 45 degrees */
+.obstacle::before {
+  content: "";
+  display: block;
+  width: 65%;
+  height: 65%;
+  margin: 18% auto 0;
+  background-color: #7A5230;
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+}
+
+.obstacle:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 4px;
+}
+
+/* The cell flashes red when you tap dirty water */
+.grid-cell.penalty {
+  background-color: var(--red);
+}
+
+/* The score shakes and turns red after a penalty */
+#current-cans.shake {
+  animation: shake 0.4s ease;
+  color: var(--red);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+
+/* ---------- Message styles ---------- */
+.achievement.win {
+  background-color: var(--yellow);
+}
+
+.achievement.warn {
+  background-color: #fff;
+  border: 3px solid var(--red);
+}
+
+/* ---------- Confetti ---------- */
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; /* clicks pass through to the page */
+  z-index: 1000;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 14px;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  to { transform: translate(var(--drift), 110vh) rotate(720deg); }
+}
+
+/* ---------- Credit line ---------- */
+.credit {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+.credit a {
+  color: var(--text);
+}
+
+/* The brand name should never split onto two lines */
+.brand-name {
+  white-space: nowrap;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 20px;
+    margin: 10px auto;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .game-instructions,
+  .stats p {
+    font-size: 16px;
+  }
+
+  .game-grid {
+    gap: 10px;
+  }
+}
+
+/* Turn off animations for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .water-can,
+  .obstacle,
+  #current-cans.bump,
+  #current-cans.shake {
+    animation: none;
+  }
+
+  .confetti {
+    display: none;
+  }
+}
