@@ -4,19 +4,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Water Quest</title>
+
+  <!-- Montserrat: a free font that closely resembles Proxima Nova,
+       charity: water's primary brand font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div class="container">
+  <main class="container">
     <h1>Water Quest</h1>
     <p class="game-instructions">
-      Tap the water cans as they pop up. Collect <span id="goal-cans">20</span> before time runs out,
-      and avoid the brown dirty water drops. They cost you cans!
+      Pick a difficulty, then tap the water cans as they pop up. Collect
+      <span id="goal-cans">20</span> before time runs out, and avoid the brown
+      dirty water drops. They cost you cans!
     </p>
+
+    <!-- Difficulty: Easy, Normal, or Hard (settings live in script.js) -->
+    <div class="difficulty">
+      <label for="difficulty-selector">Difficulty</label>
+      <select id="difficulty-selector">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
 
     <div class="stats">
       <p>Cans Collected: <span id="current-cans">0</span></p>
       <p>Time Left: <span id="timer">30</span>s</p>
+      <p>Next Milestone: <span id="next-milestone">5</span></p>
     </div>
 
     <!-- Messages appear here: milestones, start, and game over -->
@@ -28,12 +47,25 @@
       <button id="start-game">Start Game</button>
       <button id="reset-game">Reset</button>
     </div>
+  </main>
 
-    <p class="credit">
-      A game for <span class="brand-name">charity: water</span>.
-      <a href="https://www.charitywater.org" target="_blank" rel="noopener">Learn more</a>
-    </p>
-  </div>
+  <!-- Footer with links to charity: water and donation pages -->
+  <footer class="site-footer">
+    <p class="footer-message">Play for fun. Give to make clean water real.</p>
+
+    <a class="donate-button" href="https://www.charitywater.org/donate" target="_blank" rel="noopener">Donate to <span class="brand-name">charity: water</span></a>
+
+    <nav aria-label="charity: water links">
+      <ul class="footer-links">
+        <li><a href="https://www.charitywater.org/" target="_blank" rel="noopener">Visit <span class="brand-name">charity: water</span></a></li>
+        <li><a href="https://www.charitywater.org/our-work" target="_blank" rel="noopener">Our work</a></li>
+        <li><a href="https://www.charitywater.org/donate/the-spring" target="_blank" rel="noopener">Join The Spring (monthly giving)</a></li>
+      </ul>
+    </nav>
+
+    <p class="footer-note">A student project made for a web development course.</p>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

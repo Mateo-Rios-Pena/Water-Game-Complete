@@ -12,9 +12,15 @@ Secondary Colors:
 - Dark Green: #159A48
 - Pink:       #F16061
 
-Fonts:
-- Proxima Nova
-- Avenir
+Black (from the Brand Usage Guide): #1A1A1A
+
+Fonts (from the brand guide):
+- Proxima Nova (primary)
+- Avenir (fallback)
+
+Proxima Nova isn't free to use on the web, so this game loads Montserrat,
+a free font that closely resembles it. The stack below tries Montserrat
+first so everyone sees the same font, then falls back to the brand fonts.
 
 */
 
@@ -23,6 +29,7 @@ Fonts:
   --blue: #2E9DF7;
   --light-blue: #8BD1CB;
   --red: #F5402C;
+  --black: #1A1A1A;
   --text: #333;
 }
 
@@ -31,7 +38,7 @@ Fonts:
 }
 
 body {
-  font-family: "Proxima Nova", Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Montserrat", "Proxima Nova", Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   padding: 20px;
   background-color: var(--yellow);  /* brand yellow around a white card */
@@ -60,6 +67,41 @@ h1 {
   text-align: center;
 }
 
+/* ---------- Difficulty ---------- */
+.difficulty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.difficulty label {
+  font-weight: 700;
+}
+
+#difficulty-selector {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: 2px solid var(--text);
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+#difficulty-selector:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#difficulty-selector:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
 /* ---------- Score and timer ---------- */
 .stats {
   display: flex;
@@ -79,7 +121,8 @@ h1 {
 }
 
 #current-cans,
-#timer {
+#timer,
+#next-milestone {
   display: inline-block;
   min-width: 1.5em;
   text-align: center;
@@ -179,7 +222,32 @@ h1 {
   100% { transform: scale(1); }
 }
 
-/* ---------- Start button ---------- */
+/* "+1" and "-2" that float up from a cell after a tap */
+.floating-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  font-size: clamp(22px, 5vw, 32px);
+  font-weight: 800;
+  pointer-events: none;
+  animation: float-up 0.7s ease-out forwards;
+}
+
+.floating-text.gain {
+  color: var(--black);
+}
+
+.floating-text.loss {
+  color: #fff;
+}
+
+@keyframes float-up {
+  0%   { transform: translate(-50%, -50%); opacity: 1; }
+  100% { transform: translate(-50%, -160%); opacity: 0; }
+}
+
+/* ---------- Buttons ---------- */
 .buttons {
   display: flex;
   justify-content: center;
@@ -202,14 +270,14 @@ h1 {
   transition: transform 0.2s;
 }
 
-/* Reset is the secondary button: white with a dark outline */
+/* Reset are the secondary buttons: white with a dark outline */
 #reset-game {
   background-color: #fff;
   border: 2px solid var(--text);
 }
 
 #start-game:hover:not(:disabled),
-#reset-game:hover {
+#reset-game:hover{
   transform: translateY(-2px);
 }
 
@@ -270,7 +338,8 @@ h1 {
 }
 
 /* ---------- Message styles ---------- */
-.achievement.win {
+.achievement.win,
+.achievement.milestone {
   background-color: var(--yellow);
 }
 
@@ -300,20 +369,73 @@ h1 {
   to { transform: translate(var(--drift), 110vh) rotate(720deg); }
 }
 
-/* ---------- Credit line ---------- */
-.credit {
-  margin: 24px 0 0;
-  text-align: center;
-  font-size: 14px;
-}
-
-.credit a {
-  color: var(--text);
-}
-
 /* The brand name should never split onto two lines */
 .brand-name {
   white-space: nowrap;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  max-width: 750px;
+  margin: 20px auto 0;
+  padding: 32px 40px;
+  background-color: var(--black);   /* brand: black background */
+  color: #fff;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.footer-message {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.donate-button {
+  display: inline-block;
+  padding: 14px 32px;
+  background-color: var(--yellow);
+  color: var(--black);
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.donate-button:hover {
+  transform: translateY(-2px);
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 24px;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+.footer-links a {
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: var(--yellow);
+}
+
+.donate-button:focus-visible,
+.footer-links a:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.footer-note {
+  margin: 20px 0 0;
+  font-size: 13px;
+  color: #CBCCD1;
 }
 
 /* ---------- Small screens ---------- */
@@ -339,12 +461,17 @@ h1 {
   .game-grid {
     gap: 10px;
   }
+
+  .site-footer {
+    padding: 24px 20px;
+  }
 }
 
 /* Turn off animations for visitors who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .water-can,
   .obstacle,
+  .floating-text,
   #current-cans.bump,
   #current-cans.shake {
     animation: none;
